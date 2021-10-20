@@ -17,10 +17,49 @@ int yarik_debilishe_tuporiloe()
     printf("\n Вы получаете %d грн.", b);
     return b;
 }
-int std_game(int points) {
-    int a, b, c, d, min_a, max_a, chc_in, try_count, bet;
-    char ans_in;
+int rus_roulette() {
+    printf("Русская рулетка:\n");
+    int c, b, bullet, game, surv_count;
+    int a[6];
+    c = 1;
+    surv_count = 0;
+    while (c != 0) {
+        printf("Нажмите 1, если хотите выстрелить.\n");
+        printf("Нажмите 2, если хотите прокрутить барабан.\n");
+        printf("Нажмите 3, если хотите выйти.\n");
+        a[0] = 0;
+        a[1] = 0;
+        a[2] = 0;
+        a[3] = 0;
+        a[4] = 0;
+        a[5] = 0;
+        bullet = rand() % 6;
+        printf("%d", bullet);
+        a[bullet] = 1;
+        scanf_s("%d", &game);
+        switch (game) {
+        case 1:
+            if (a[0] == 1) {
+                printf("\n you died");
+                return 0;
+                c = 0;
+            }
+            else {
+                printf("\n goood_game");
+                surv_count += 1;
+            }
+        case 2:
+            printf("Барабан прокручен\n");
+        case 3:
+            printf("До новых встреч\n");
+            break;
 
+        }
+    }
+}
+int std_game(int points) {
+    int a, b, c, d, min_a, max_a, chc_in, try_count, bet, max_try, gain, input_flag;
+    char ans_in;
     a = points;
     b = 1;
     if (a == 0) {
@@ -30,9 +69,12 @@ int std_game(int points) {
     else {
         while ((b == 1) && (a != 0))
         {
-            printf("%s", "\n У вас на балансе %a гривней. Вы хотите играть? [1 - это да/0 - это ярик дурак] \n");
+            printf("\nУ вас на балансе %d гривней. Вы хотите играть? [1 - это да/0 - это ярик дурак]", a);
             scanf_s("%d", &chc_in);
             if (chc_in == 1) {
+
+                printf("\nВведите вашу ставку: ");
+                scanf_s("%d", &bet);
                 printf("\nВведите два числа определяющих диапозон загадываемых чисел: ");
                 scanf_s("%d", &ans_in);
                 min_a = int(ans_in);
@@ -42,9 +84,11 @@ int std_game(int points) {
                     max_a = int(ans_in);
                 }
                 c = min_a + rand() % (max_a - min_a + 1);
+                printf("\nВведите число попыток за которое вы планируете отгадать число: ");
+                scanf_s("%d", &max_try);
                 try_count = 0;
                 d = 0;
-                while (d != c)
+                while ((d != c) && (max_try >= try_count))
                 {
                     printf("\nВведите число: ");
                     scanf_s("%d", &d);
@@ -57,21 +101,21 @@ int std_game(int points) {
                         printf("\n Ваше число больше чем загаданное.");
                     }
                     else if (d == c) {
-                        printf("\n Вы угадали число за ", try_count, "попыток");
-                        return(bet, try_count);
+                        printf("\n Вы угадали число за %d попыток", try_count);
                     }
 
                 }
-
-
-
-
-
-
+                if (try_count > max_try) {
+                    printf("\nК сожалению вы не смогли угадать число за %d попыток. Вы полностью теряете вашу ставку.", max_try);
+                    gain = 0;
+                }
+                else {
+                    gain = 5 * bet / (max_try * try_count);
+                    printf("\nВаш выигрыш равен %d грн.", gain);
+                }
+                return(gain - bet);
             }
-
         }
-
     }
 }
 
@@ -79,11 +123,12 @@ int std_game(int points) {
 int main()
 {
     setlocale(LC_ALL, "Rus");
-    int flag, bipki;
+    int flag, bipki, x;
     bipki = 0;
     flag = 1;
     printf("Приветствуем вас в Казино!С чего желаете начать?\n");
     while (flag == 1) {
+
         printf("На вашем счету %d грн.\n", bipki);
         printf("Нажмите 1, если хотите узнать правила игры.\n");
         printf("Нажмите 2, если хотите обменять денгбе.\n");
@@ -104,11 +149,19 @@ int main()
             flag = 0;
             break;
         case 4:
-            printf("Ну что же - приступим!\n");
+            bipki += std_game(bipki);
             break;
         case 5:
             printf("- Слушай, Изя, я знаю гениальный способ, как в ресторане бесплатно поесть. - А ну, Абрам, рассказывай. - Идёшь в хорошее заведение незадолго до закрытия.Заказываешь закусочку, лучшие блюда, десерт, коньяк.Когда все официанты разойдутся, последний подойдёт к тебе, а ты говоришь : А я уже заплатил вашему товарищу, который ушёл. На следующий день пошли в ресторан. Заказывают всё по полной программе и сидят.Наконец подходит последний официант : -Извините, но пора закрывать, прошу оплатить заказ. Абрам : -Но мы уже вашему коллеге деньги дали. Изя :-Кстати, нам ещё долго ждать сдачу ? \n");
             break;
+        case 6:
+            x = rus_roulette();
+            if (x > 0) {
+                bipki = bipki ^ x;
+            }
+            else {
+                bipki = 0;
+            }
         default:
             printf("Ввод данных неверен, попробуйте ещё раз.\n");
             break;
