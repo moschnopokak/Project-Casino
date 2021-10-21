@@ -3,12 +3,6 @@
 #include <stdlib.h>
 #include <cstdio>
 
-int random(int a, int b)
-{
-    srand(time(NULL));
-    if (a > 0) return a + rand() % (b - a);
-    else return a + rand() % (abs(a) + b);
-}
 int yarik_debilishe_tuporiloe()
 {
     int a, b;
@@ -64,7 +58,8 @@ int rus_roulette() {
     }
 }
 int std_game(int points) {
-    int a, b, c, d, min_a, max_a, chc_in, try_count, bet, max_try, gain, input_flag, lc_minmax;
+    int a, b, c, d, min_a, max_a, chc_in, try_count, bet, max_try, gain, input_flag;
+    char ans_in;
     a = points;
     b = 1;
     if (a == 0) {
@@ -81,12 +76,12 @@ int std_game(int points) {
                 printf("\nВведите вашу ставку: ");
                 scanf_s("%d", &bet);
                 printf("\nВведите два числа определяющих диапозон загадываемых чисел: ");
-                scanf_s("%d", &min_a);
+                scanf_s("%d", &ans_in);
+                min_a = int(ans_in);
                 scanf_s("%d", &max_a);
                 if (max_a < min_a) {
-                    lc_minmax = min_a;
                     min_a = max_a;
-                    max_a = lc_minmax;
+                    max_a = int(ans_in);
                 }
                 c = min_a + rand() % (max_a - min_a + 1);
                 printf("\nВведите число попыток за которое вы планируете отгадать число: ");
@@ -118,11 +113,10 @@ int std_game(int points) {
                     gain = 5 * bet / (max_try * try_count);
                     printf("\nВаш выигрыш равен %d грн.", gain);
                 }
-
+                return(gain - bet);
             }
         }
     }
-    return(gain - bet);
 }
 
 
