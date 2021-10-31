@@ -6,19 +6,21 @@
 int yarik_debilishe_tuporiloe()
 {
     int a, b;
-    float c;
-    printf("\nКоэффициент обмена: 100 рублей к 65 гривни. Введите сумму(в рублях) которую вы хотите обменять: ");
+    printf("Коэффициент обмена: 100 рублей к 65 гривни. Взнос минимум 100 рублей. Введите сумму(в рублях) которую вы хотите обменять: ");
     scanf_s("%d", &a);
-    c = (65 * a / 100) % 1;
-    if (c != 0) {
-        printf("\n Ваша сдача: %d руб.", c);
+    if (a > 100) {
+        b = 65 * a / 100;
+        printf("Вы получаете %d грн.", b);
     }
-    b = 65 * a / 100;
-    printf("\n Вы получаете %d грн.", b);
+    else {
+        printf("Ваш ввод неверен.");
+        b = 0;
+    }
     return b;
 }
 int rus_roulette() {
     printf("\nРусская рулетка:\n");
+    srand(time(NULL));
     int c, b, bullet, game, surv_count;
     int a[6];
     c = 1;
@@ -40,91 +42,143 @@ int rus_roulette() {
         switch (game) {
         case 1:
             if (a[0] == 1) {
-                printf("\n ТЫ УМЕР!");
+                printf("\nВы проиграли все ваши деньги.");
                 return 0;
                 c = 0;
             }
             else {
-                printf("\n ТЫ КРУТ!");
+                printf("\nВы остаетесь в игре.");
                 surv_count += 1;
             }
+            break;
         case 2:
             printf("\nБарабан прокручен");
+            break;
         case 3:
             printf("\nДо новых встреч");
+            return (surv_count + 1);
+            break;
+        default:
+            printf("\nВвод данных неверен, попробуйте ещё раз.");
             break;
 
         }
     }
 }
 int std_game(int points) {
-    int a, b, c, d, min_a, max_a, chc_in, try_count, bet, max_try, gain, input_flag;
-    char ans_in;
+    int a, b, c, d, min_a, max_a, chc_in, try_count, bet, max_try, gain, input_flag, ans_in, bet_flag, max_flag, win_flag, mmd_flag;
+    srand(time(NULL));
     a = points;
     b = 1;
+    bet = 0;
+    bet_flag = 1;
+    max_flag = 1;
+    mmd_flag = 1;
+    win_flag = 0;
+    gain = 0;
     if (a == 0) {
-        printf("\n Если вы хотите играть вам нужно обменять рубли на гривны. На данный моменту у вас 0 гривней.");
+        printf("\nЕсли вы хотите играть вам нужно обменять рубли на гривны. На данный моменту у вас 0 гривней.");
         return 0;
     }
     else {
         while ((b == 1) && (a != 0))
         {
-            printf("\nУ вас на балансе %d гривней. Вы хотите играть? [1 - это да/0 - это ярик дурак]", a);
+            printf("\nУ вас на балансе %d гривней. Вы хотите играть? [1 - это да/0 - это нет]\n", a);
             scanf_s("%d", &chc_in);
-            if (chc_in == 1) {
-
-                printf("\nВведите вашу ставку: ");
-                scanf_s("%d", &bet);
-                printf("\nВведите два числа определяющих диапозон загадываемых чисел: ");
-                scanf_s("%d", &ans_in);
-                min_a = int(ans_in);
-                scanf_s("%d", &max_a);
-                if (max_a < min_a) {
-                    min_a = max_a;
-                    max_a = int(ans_in);
+            switch (chc_in) {
+            case 1:
+                while (bet_flag == 1) {
+                    printf("\nВведите вашу ставку: ");
+                    scanf_s("%d", &bet);
+                    if (bet <= a) {
+                        bet_flag = 0;
+                    }
+                    else {
+                        printf("\nУ вас нет столько гривен.");
+                    }
                 }
+                while (mmd_flag == 1) {
+                    printf("\nВведите два числа определяющих диапозон загадываемых чисел. Минимальный диапазон(разница максимального и минимального числа) должен быть равен 2.\n");
+                    scanf_s("%d", &ans_in);
+                    min_a = int(ans_in);
+                    scanf_s("%d", &max_a);
+                    if (max_a < min_a) {
+                        min_a = max_a;
+                        max_a = int(ans_in);
+                    }
+                    if ((max_a - min_a) > 2) {
+                        mmd_flag = 0;
+                    }
+                    else {
+                        printf("Вы ввели недопустимый диапазон.");
+                    }
+                }
+
                 c = min_a + rand() % (max_a - min_a + 1);
-                printf("\nВведите число попыток за которое вы планируете отгадать число: ");
-                scanf_s("%d", &max_try);
+                while (max_flag == 1) {
+                    printf("\nВведите число попыток за которое вы планируете отгадать число: ");
+                    scanf_s("%d", &max_try);
+                    if (max_try >= 1) {
+                        max_flag = 0;
+                    }
+                    else {
+                        printf("\nВы ввели недопустимое число попыток за которое можно отгадать число.");
+                    }
+                }
+
                 try_count = 0;
                 d = 0;
-                while ((d != c) && (max_try >= try_count))
+                while ((d != c) && (max_try > try_count))
                 {
                     printf("\nВведите число: ");
                     scanf_s("%d", &d);
                     try_count += 1;
                     if (d < c) {
-                        printf("\n Ваше число меньше чем загаданное.");
+                        printf("\nВаше число меньше чем загаданное.");
 
                     }
                     else if (d > c) {
-                        printf("\n Ваше число больше чем загаданное.");
+                        printf("\nВаше число больше чем загаданное.");
                     }
                     else if (d == c) {
-                        printf("\n Вы угадали число за %d попыток", try_count);
+                        printf("\nВы угадали число за %d попыток", try_count);
+                        win_flag = 1;
                     }
 
                 }
-                if (try_count > max_try) {
+                if (win_flag != 1) {
                     printf("\nК сожалению вы не смогли угадать число за %d попыток. Вы полностью теряете вашу ставку.", max_try);
                     gain = 0;
                 }
                 else {
-                    gain = 5 * bet / (max_try * try_count);
+                    if (1 + (try_count / log2(max_a - min_a)) > 1) {
+                        gain = bet * (1 + try_count / log2(max_a - min_a));
+                    }
+                    else {
+                        gain = bet * 0, 95;
+                    }
                     printf("\nВаш выигрыш равен %d грн.", gain);
                 }
-                
-            }
-        }
-    }
-    return(gain - bet);
-}
+                break;
 
+
+            case 0:
+                printf  ("Хорошо. Мы возвращаем вас в главное меню.");
+                return(0);
+                break;
+            default:
+                printf("\nВвод данных неверен, попробуйте ещё раз.");
+            }
+            break;
+        }
+        return(gain - bet);
+    }
+}
 
 int main()
 {
     setlocale(LC_ALL, "Rus");
-    int flag, bipki, x;
+    int flag, bipki, x, wn;
     bipki = 0;
     flag = 1;
     printf("\nПриветствуем вас в Казино!С чего желаете начать?\n");
@@ -136,7 +190,7 @@ int main()
         printf("\nНажмите 3, если желаете покинуть Казино.");
         printf("\nНажмите 4, если хотите начать игру.");
         printf("\nНажмите 5, если хотите анекдот.");
-        printf("\nНажмите 6, если хотите сыграть в русскую рулетку.");
+        printf("\nНажмите 6, если хотите сыграть в русскую рулетку.\n");
         int input;
         scanf_s("%d", &input);
         switch (input) {
@@ -147,7 +201,7 @@ int main()
             bipki += yarik_debilishe_tuporiloe();
             break;
         case 3:
-            printf("До свидания, возвращайтесь к нам поскорее :(\n");
+            printf("\nДо свидания, возвращайтесь к нам поскорее :(");
             flag = 0;
             break;
         case 4:
@@ -158,8 +212,10 @@ int main()
             break;
         case 6:
             x = rus_roulette();
+            wn = bipki * (x - 1);
             if (x > 0) {
-                bipki = bipki ^ x;
+                printf("Ваш выигрыш равен %d грн.", wn);
+                bipki = bipki * x;
             }
             else {
                 bipki = 0;
