@@ -36,7 +36,7 @@ int rus_roulette() {
         a[4] = 0;
         a[5] = 0;
         bullet = rand() % 6;
-        printf("%d", bullet);
+        //printf("%d", bullet);
         a[bullet] = 1;
         scanf_s("%d", &game);
         switch (game) {
@@ -117,8 +117,9 @@ int std_game(int points) {
                 c = min_a + rand() % (max_a - min_a + 1);
                 while (max_flag == 1) {
                     printf("\nВведите число попыток за которое вы планируете отгадать число: ");
+                    max_flag = 1;
                     scanf_s("%d", &max_try);
-                    if (max_try >= 1) {
+                    if ((max_try >= 1) && (max_try < (max_a - min_a))) {
                         max_flag = 0;
                     }
                     else {
