@@ -2,6 +2,7 @@
 #include <locale.h>
 #include <stdlib.h>
 #include <cstdio>
+#include <time.h>
 
 int yarik_debilishe_tuporiloe()
 {
@@ -66,7 +67,7 @@ int rus_roulette() {
     }
 }
 int std_game(int points) {
-    int a, b, c, d, min_a, max_a, chc_in, try_count, bet, max_try, gain, input_flag, ans_in, bet_flag, max_flag, win_flag, mmd_flag;
+    int a, b, c, d, min_a, max_a, chc_in, try_count, bet, max_try, gain, input_flag, ans_in, bet_flag, max_flag, win_flag, mmd_flag, delen, pervoe, vtoroe;
     srand(time(NULL));
     a = points;
     b = 1;
@@ -76,6 +77,9 @@ int std_game(int points) {
     mmd_flag = 1;
     win_flag = 0;
     gain = 0;
+    pervoe = 0;
+    vtoroe = 0;
+    delen = 0;
     if (a == 0) {
         printf("\nЕсли вы хотите играть вам нужно обменять рубли на гривны. На данный моменту у вас 0 гривней.");
         return 0;
@@ -119,7 +123,7 @@ int std_game(int points) {
                     printf("\nВведите число попыток за которое вы планируете отгадать число: ");
                     max_flag = 1;
                     scanf_s("%d", &max_try);
-                    if ((max_try >= 1) && (max_try < (max_a - min_a))) {
+                    if ((max_try >= 1) && (max_try < (max_a - min_a)+1)) {
                         max_flag = 0;
                     }
                     else {
@@ -152,15 +156,16 @@ int std_game(int points) {
                     gain = 0;
                 }
                 else {
-                    if (1 + (try_count / log2(max_a - min_a)) > 1) {
-                        gain = bet * (1 + try_count / log2(max_a - min_a));
-                    }
-                    else {
-                        gain = bet * 0, 95;
-                    }
+                    pervoe = (max_a - min_a + 1);
+                    //printf("\nпервое число: %d", pervoe);
+                    vtoroe = (max_try + try_count);
+                    //printf("\nвторое число: %d", vtoroe);
+                    delen = pervoe / vtoroe;
+                    printf("\nКоэффициент: %d", delen * 2);
+                    gain = (bet * delen * 2);
                     printf("\nВаш выигрыш равен %d грн.", gain);
                 }
-                break;
+            break;
 
 
             case 0:
