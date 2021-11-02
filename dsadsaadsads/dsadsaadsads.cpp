@@ -161,9 +161,14 @@ int std_game(int points) {
                     vtoroe = (max_try + try_count);
                     //printf("\nвторое число: %d", vtoroe);
                     delen = pervoe / vtoroe;
-                    printf("\nКоэффициент: %d", delen * 2);
+                    printf("\nКоэффициент: x %d", delen * 2);
                     gain = (bet * delen * 2);
-                    printf("\nВаш выигрыш равен %d грн.", gain);
+                    if (gain == 0) {
+                        printf("\nВы потеряли свою ставку в размере %d грн.", bet);
+                    }
+                    else {
+                        printf("\nВаш выигрыш равен %d грн.", gain);
+                    }
                 }
             break;
 
