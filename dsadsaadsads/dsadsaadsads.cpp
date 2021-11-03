@@ -67,7 +67,7 @@ int rus_roulette() {
     }
 }
 int std_game(int points) {
-    int a, b, c, d, min_a, max_a, chc_in, try_count, bet, max_try, gain, input_flag, ans_in, bet_flag, max_flag, win_flag, mmd_flag, delen, pervoe, vtoroe;
+    int a, b, c, d, min_a, max_a, chc_in, try_count, bet, max_try, gain, input_flag, ans_in, bet_flag, max_flag, win_flag, mmd_flag, delen, pervoe, vtoroe, hit_flag;
     srand(time(NULL));
     a = points;
     b = 1;
@@ -75,6 +75,7 @@ int std_game(int points) {
     bet_flag = 1;
     max_flag = 1;
     mmd_flag = 1;
+    hit_flag = 1;
     win_flag = 0;
     gain = 0;
     pervoe = 0;
@@ -91,9 +92,17 @@ int std_game(int points) {
             scanf_s("%d", &chc_in);
             switch (chc_in) {
             case 1:
-                while (bet_flag == 1) {
+                while ((bet_flag == 1) or (hit_flag == 1)) {
                     printf("\nВведите вашу ставку: ");
+                    bet_flag = 1;
+                    hit_flag = 1;
                     scanf_s("%d", &bet);
+                    if (bet <= 0) {
+                        printf("Хитрый дофига?");
+                    }
+                    else {
+                        hit_flag = 0;
+                    }
                     if (bet <= a) {
                         bet_flag = 0;
                     }
